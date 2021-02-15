@@ -21,6 +21,7 @@ public class GlowAirBlock extends AirBlock {
 
 	@Override
 	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+		// TODO: packet to restart rebuild block
 		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 	}
 

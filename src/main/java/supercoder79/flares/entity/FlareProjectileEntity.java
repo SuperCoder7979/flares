@@ -3,6 +3,8 @@ package supercoder79.flares.entity;
 import supercoder79.flares.block.FlaresBlocks;
 import supercoder79.flares.block.GlowAirBlock;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
@@ -23,6 +25,8 @@ public class FlareProjectileEntity extends SnowballEntity {
 		if (!this.world.isClient) {
 			createTrailGlowAir();
 		} else {
+			this.world.getLightingProvider().checkBlock(this.getBlockPos());
+			MinecraftClient.getInstance().worldRenderer.updateBlock(this.world, this.getBlockPos(), null, null, 8);
 			createTrailParticles();
 		}
 	}
@@ -37,6 +41,14 @@ public class FlareProjectileEntity extends SnowballEntity {
 		if (this.world.isClient()) {
 			createCollisionParticles();
 
+			for(int x = -8; x <= 8; x++) {
+				for (int z = -8; z <= 8; z++) {
+					for (int y = -8; y <= 8; y++) {
+						this.world.getLightingProvider().checkBlock(center.add(x, y, z));
+						MinecraftClient.getInstance().worldRenderer.updateBlock(this.world, center.add(x, y, z), null, null, 8);
+					}
+				}
+			}
 			return;
 		}
 
